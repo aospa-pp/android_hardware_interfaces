@@ -163,8 +163,9 @@ ndk::ScopedAStatus WifiRttController::rangeRequestInternal(
                     }
                 }
             };
-    legacy_hal::wifi_error legacy_status = legacy_hal_.lock()->startRttRangeRequestV3(
-            ifname_, cmd_id, legacy_configs_v3, on_results_callback_v3);
+    // legacy_hal::wifi_error legacy_status = legacy_hal_.lock()->startRttRangeRequestV3(
+    //         ifname_, cmd_id, legacy_configs_v3, on_results_callback_v3);
+    legacy_hal::wifi_error legacy_status = legacy_hal::WIFI_ERROR_NOT_SUPPORTED;
 
     if (legacy_status != legacy_hal::WIFI_ERROR_NOT_SUPPORTED) {
         return createWifiStatusFromLegacyError(legacy_status);

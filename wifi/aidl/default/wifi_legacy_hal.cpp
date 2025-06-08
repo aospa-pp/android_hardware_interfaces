@@ -1445,8 +1445,9 @@ std::pair<wifi_error, wifi_rtt_capabilities> WifiLegacyHal::getRttCapabilities(
 std::pair<wifi_error, wifi_rtt_capabilities_v3> WifiLegacyHal::getRttCapabilitiesV3(
         const std::string& iface_name) {
     wifi_rtt_capabilities_v3 rtt_caps_v3;
-    wifi_error status = global_func_table_.wifi_get_rtt_capabilities_v3(getIfaceHandle(iface_name),
-                                                                        &rtt_caps_v3);
+    // wifi_error status = global_func_table_.wifi_get_rtt_capabilities_v3(getIfaceHandle(iface_name),
+    //                                                                     &rtt_caps_v3);
+    wifi_error status = WIFI_ERROR_NOT_SUPPORTED;
     return {status, rtt_caps_v3};
 }
 
