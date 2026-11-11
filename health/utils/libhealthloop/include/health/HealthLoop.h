@@ -80,6 +80,14 @@ class HealthLoop {
     // then reset wake alarm interval by calling AdjustWakealarmPeriods.
     void AdjustWakealarmPeriods(bool charger_online);
 
+    // Called when a uevent for a power supply arrives, with the name of the
+    // power supply extracted from the uevent's DEVPATH. The default
+    // implementation does nothing; a subclass can override this to
+    // re-evaluate whether the power supply is (still) considered a charger,
+    // in case it appeared, went away or was unreadable when the power
+    // supplies were scanned during init.
+    virtual void OnPowerSupplyUevent(const char* /* ps_name */) {}
+
   private:
     struct EventHandler {
         HealthLoop* object = nullptr;

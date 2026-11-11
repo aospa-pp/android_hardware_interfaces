@@ -436,4 +436,12 @@ void Health::UpdateChargerPresence(const char* const device_name) {
     battery_monitor_.updateChargerPresence(device_name);
 }
 
+void Health::OnPowerSupplyUevent(const char* ps_name) {
+    // The power supplies are only scanned once, in the constructor. If a
+    // power supply was unreadable or absent at that point (e.g. a USB power
+    // supply exposed via pmic_glink that has not come up yet), re-evaluate
+    // it now that something about it changed.
+    UpdateChargerPresence(ps_name);
+}
+
 }  // namespace aidl::android::hardware::health

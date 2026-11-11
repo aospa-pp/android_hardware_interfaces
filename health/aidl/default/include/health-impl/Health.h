@@ -84,6 +84,7 @@ class Health : public BnHealth, public HalHealthLoopCallback {
     // HalHealthLoopCallback implementation.
     void OnInit(HalHealthLoop* hal_health_loop, struct healthd_config* config) override;
     void OnHealthInfoChanged(const HealthInfo& health_info) override;
+    void OnPowerSupplyUevent(const char* ps_name) override;
 
     // A subclass may override this if it wants to handle binder events differently.
     virtual void BinderEvent(uint32_t epevents);

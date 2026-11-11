@@ -53,6 +53,10 @@ int HalHealthLoop::PrepareToWait() {
     return callback_->OnPrepareToWait();
 }
 
+void HalHealthLoop::OnPowerSupplyUevent(const char* ps_name) {
+    callback_->OnPowerSupplyUevent(ps_name);
+}
+
 void HalHealthLoop::OnHealthInfoChanged(const HealthInfo& health_info) {
     callback_->OnHealthInfoChanged(health_info);
     set_charger_online(health_info);

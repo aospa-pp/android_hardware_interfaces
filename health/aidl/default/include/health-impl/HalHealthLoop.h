@@ -38,6 +38,10 @@ class HalHealthLoopCallback {
     virtual int OnPrepareToWait() { return -1; }
     // Called by HalHealthLoop::ScheduleBatteryUpdate
     virtual void OnHealthInfoChanged(const HealthInfo&) {}
+    // Called by HalHealthLoop::OnPowerSupplyUevent. The health HAL
+    // implementation can override this to re-evaluate whether the power
+    // supply is (still) considered a charger.
+    virtual void OnPowerSupplyUevent(const char* /* ps_name */) {}
 };
 
 // AIDL version of android::hardware::health::V2_1::implementation::HalHealthLoop.
@@ -57,6 +61,7 @@ class HalHealthLoop final : public ::android::hardware::health::HealthLoop {
     virtual void Heartbeat() override;
     virtual int PrepareToWait() override;
     virtual void ScheduleBatteryUpdate() override;
+    virtual void OnPowerSupplyUevent(const char* ps_name) override;
 
   private:
     std::shared_ptr<IHealth> service_;

@@ -20,6 +20,7 @@
 #include <health/HealthLoop.h>
 
 #include <errno.h>
+#include <string.h>
 #include <sys/epoll.h>  // epoll_create1(), epoll_ctl(), epoll_wait()
 #include <sys/timerfd.h>
 #include <unistd.h>  // read()
@@ -143,15 +144,29 @@ bool HealthLoop::RecvUevents() {
 
         msg[n] = '\0';
         msg[n + 1] = '\0';
+        bool is_power_supply = false;
+        const char* power_supply_name = nullptr;
         for (char* cp = msg; *cp;) {
             if (strcmp(cp, "SUBSYSTEM=power_supply") == 0) {
-                update_stats = true;
-                break;
+                is_power_supply = true;
+            } else if (strncmp(cp, "DEVPATH=", strlen("DEVPATH=")) == 0) {
+                const char* sep = strrchr(cp + strlen("DEVPATH="), '/');
+                if (sep != nullptr) {
+                    power_supply_name = sep + 1;
+                }
             }
 
             /* advance to after the next \0 */
             while (*cp++) {
             }
+        }
+        if (is_power_supply && power_supply_name != nullptr && *power_supply_name) {
+            // Give the implementation a chance to re-evaluate whether this
+            // power supply is (still) considered a charger, in case it wasn't
+            // discovered or was unreadable when the power supplies were
+            // scanned during init.
+            OnPowerSupplyUevent(power_supply_name);
+            update_stats = true;
         }
     }
 }
